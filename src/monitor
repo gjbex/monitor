@@ -23,7 +23,7 @@ my $default_delta = 5;
 my $time_unit = " (s)";
 my @fields = ('size', '%mem', '%cpu');
 my %units = (
-    'size' => ' (kb)',
+    'size' => ' (kB)',
     '%mem' =>  '',
     '%cpu' =>  ''
     );
