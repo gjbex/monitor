@@ -27,7 +27,7 @@ my %units = (
     '%mem' =>  '',
     '%cpu' =>  ''
     );
-my $file_size_unit = ' (b)';
+my $file_size_unit = ' (B)';
 # string to show for file size if the file does not exist (yet?)
 my $no_such_file = 'N/A';
 
