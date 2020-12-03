@@ -20,12 +20,31 @@ The user is expected to be be familiar with the linux bash shell.
 ## Monitoring a program
 
 Starting a program, e.g., simulation, to monitor is very straightforward
+
 ```bash
 $ monitor simulation
 ```
+
 monitor will write the CPU usage and memory consumption of simulation to
 standard error.  Values will be displayed every 5 seconds.  This is the rate
 at which monitor samples the program's metrics.
+
+The data is obtained using the `ps` command, so the semantics of the measures
+monitor reports is the same as for `ps`.  Quoting from the man page:
+
+```
+    %cpu      cpu utilization of the process in "##.#" format.  Currently,
+              it is the CPU time used divided by the time the process has
+              been running (cputime/realtime ratio), expressed as a
+              percentage.  It will not add up to 100% unless you are lucky.
+
+    %mem      ratio of the process's resident set size  to the physical
+              memory on the machine, expressed as a percentage.
+
+    size      approximate amount of swap space that would be required if the
+              process were to dirty all writable pages and then be swapped
+              out.  This number is very rough!
+```
 
 
 ## log file
@@ -33,16 +52,20 @@ at which monitor samples the program's metrics.
 Since monitor's output may interfere with that of the program to monitor,
 it is often convenient to use a log file.  The latter can be specified as
 follows:
+
 ```bash
 $ monitor -l simulation.log simulation
 ```
+
 For long running programs, it may be convenient to limit the output to, e.g.,
 the last minute of the programs execution.  Since monitor provides metrics every
 5 seconds, this implies we want to limit the output to the last 12 values to
 cover a minute:
+
 ```bash
 $ monitor -l simulation.log -n 12 simulation
 ```
+
 Note that this option is only available when monitor writes its metrics to a log
 file, not when standard error is used.
 
@@ -51,9 +74,11 @@ file, not when standard error is used.
 
 The interval at which monitor will show the metrics can be modified by
 specifying delta, the sample rate:
+
 ```bash
 $ monitor -d 60 simulation
 ```
+
 monitor will now print the program's metrics every 60 seconds.  Note that the
 minimum delta value is 1 second.
 
@@ -61,10 +86,13 @@ minimum delta value is 1 second.
 ## File sizes
 
 Some programs use temporary files, the size of which may also be a useful
-metric.  monitor provides an option to display the size of one or more files:
+metric.  monitor provides an option to display the size of one or more files
+in bytes:
+
 ```bash
 $ monitor -f tmp/simulation.tmp,cache simulation
 ```
+
 Here, the size of the file simulation.tmp in directory tmp, as well as the size
 of the file cache will be monitored. Files can be specified by absolute as well
 as relative path, and multiple files are separated by ','.
@@ -75,9 +103,11 @@ as relative path, and multiple files are separated by ','.
 Many programs, e.g., matlab, take command line options.  To make sure these do
 not interfere with those of monitor and vice versa, the program can for instance
 be started in the following way:
+
 ```bash
 $ monitor -delta 60 -- matlab -nojvm -nodisplay computation.m
 ```
+
 The use of '--' will ensure that monitor does not get confused by matlab's
 '-nojvm' and '-nodisplay' options.
 
@@ -115,15 +145,18 @@ environment variable MONITOR_EXIT_ERROR to a more suitable value.
 It is also possible to "attach" monitor to a program or process that is already
 running.  One simply determines the relevant process ID using the ps command,
 e.g., 18749, and starts monitor:
+
 ```bash
 $ monitor -p 18749
 ```
+
 Note that this feature can be (ab)used to monitor specific subprocesses.
 
 
 ## More information
 
 Help is avaible for monitor by issuing:
+
 ```bash
 $ monitor -h
 ### usage: monitor [-d <delta>] [-l <logfile>] [-f <files>]
