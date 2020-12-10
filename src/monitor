@@ -23,11 +23,11 @@ my $default_delta = 5;
 my $time_unit = " (s)";
 my @fields = ('size', '%mem', '%cpu');
 my %units = (
-    'size' => ' (kb)',
+    'size' => ' (kB)',
     '%mem' =>  '',
     '%cpu' =>  ''
     );
-my $file_size_unit = ' (b)';
+my $file_size_unit = ' (B)';
 # string to show for file size if the file does not exist (yet?)
 my $no_such_file = 'N/A';
 
