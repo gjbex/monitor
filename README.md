@@ -8,9 +8,6 @@ of the compute nodes a job using this application should run on.
 Although the tool presented here can also be used to support the software
 development process, better tools are almost certainly available.
 
-Note that currently only single node jobs are supported, MPI support may be
-added in a future release.
-
 
 ## Prerequisites
 
