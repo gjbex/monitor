@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 from argparse import ArgumentParser
-from monitor_lib import find_ancestor
-import psutil
+from monitor_lib import find_pids
 import sys
 
 
@@ -14,14 +13,7 @@ def main():
                             help='find most remote ancestor')
     arg_parser.add_argument('--user', help='user ID of processes')
     options = arg_parser.parse_args()
-    pids = []
-    for process in psutil.process_iter():
-        if options.process_name == process.name():
-            pids.append(process.pid)
-    if options.ancestor:
-        pid = pids[0] if len(pids) > 0 else None
-        pids = [find_ancestor(pid, options.user).pid]
-    print(':'.join(map(str, pids)))
+    print(':'.join(map(str, find_pids(options.process_name, options.user, options.ancestor))))
 
 
 if __name__ == '__main__':

@@ -21,3 +21,14 @@ def find_ancestor(pid=None, username=None):
         if parent.username() == username:
             return parent
     return process
+
+
+def find_pids(process_name, user=None, ancestor=False):
+    pids = []
+    for process in psutil.process_iter():
+        if process_name == process.name():
+            pids.append(process.pid)
+    if ancestor:
+        pid = pids[0] if len(pids) > 0 else None
+        pids = [find_ancestor(pid, user).pid]
+    return pids
