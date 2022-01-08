@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# determine true location of Bash script
+exec=$(readlink -f ${0})
+APP=$( basename $exec )
+DIR=$( cd -P "$( dirname "${exec}" )" && pwd )
+IMAGE="${DIR}/../img/monitor.sif"
+
+singularity run --app "${APP}" "${IMAGE}" "$@"
