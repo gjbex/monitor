@@ -1,5 +1,3 @@
-autom4te.cache
-Makefile
-config.log
-config.status
-
+img/
+bin/
+.envrc
