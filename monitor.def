@@ -1,0 +1,26 @@
+Bootstrap: docker
+From: docker.io/python
+
+%labels
+    Maintainer Geert Jan Bex
+    Institute Vlaams Supercomputer Centrum
+
+%files
+    scripts/monitor.py /bin/monitor
+
+%post
+    pip install psutil
+
+%post
+    chmod a+rx /bin/monitor
+
+
+# monitor app
+%apprun monitor
+    /bin/monitor "$@"
+
+%applabels monitor
+    BESTAPP MONITOR
+
+%apphelp monitor
+    run monitor
