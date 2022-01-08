@@ -7,13 +7,21 @@ From: docker.io/python
 
 %files
     scripts/monitor.py /bin/monitor
+    scripts/find_pids.py /bin/find_pids
+    scripts/monitor_lib.py /usr/local/lib/monitor/
+
+%post
+    chmod a+x /bin/monitor
+    chmod a+x /bin/find_pids
+
+%environment
+    export PYTHONPATH=/usr/local/lib/monitor
 
 %post
     pip install psutil
 
 %post
     chmod a+rx /bin/monitor
-
 
 # monitor app
 %apprun monitor
@@ -24,3 +32,13 @@ From: docker.io/python
 
 %apphelp monitor
     run monitor
+
+# find_pids app
+%apprun find_pids
+    /bin/find_pids "$@"
+
+%applabels find_pids
+    BESTAPP FIND_PIDS
+
+%apphelp find_pids
+    run find_pids
