@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from argparse import ArgumentParser
-from monitor_lib import find_ancestor
+from monitor_lib import find_ancestor, find_pids
 import os
 from pathlib import Path
 import platform
@@ -113,7 +113,9 @@ def process_status(process, metrics):
 
 def main():
     arg_parser = ArgumentParser(description='monitor processes')
-    arg_parser.add_argument('--pid', type=int, help='parent process ID ot monitor')
+    group = arg_parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('--process_id', type=int, help='process ID to monitor')
+    group.add_argument('--process_name', help='process name to monitor')
     arg_parser.add_argument('--user', help='user of the processes to monitor')
     arg_parser.add_argument('--delta', type=float, default=60.0,
                             help='number of seconds between measurements')
@@ -123,11 +125,24 @@ def main():
     arg_parser.add_argument('--ancestor', action='store_true',
                             help='search for ancestor owned by use and report on all its decendants')
     arg_parser.add_argument('--output-file', help='name of file to store informatoin')
+    arg_parser.add_argument('--verbose', action='store_true', help='verbose output for debugging')
     options = arg_parser.parse_args()
-    if options.ancestor:
-        process = find_ancestor(options.pid, options.user)
+    if options.process_id:
+        process = psutil.Process(options.process_id)
     else:
-        process = psutil.Process(options.pid)
+        pids = find_pids(options.process_name)
+        if len(pids) > 1:
+            if not options.ancestor:
+                print(f'# warming: there are multiple processes name {options.process_name},'
+                      f'using ancestor PID',
+                      file=sys.stderr)
+            process = find_ancestor(pids[0], options.user)
+        else:
+            process = psutil.Process(pids[0])
+    if options.verbose:
+        print(f'monitoring {process.pid}', file=sys.stderr)
+    if options.ancestor:
+        process = find_ancestor(process.pid, options.user)
     inactive = []
     if not options.affinity:
         inactive.append('affinity')
