@@ -1,5 +1,5 @@
 Bootstrap: docker
-From: docker.io/python
+From: docker.io/python:3.8-slim
 
 %labels
     Maintainer Geert Jan Bex
@@ -13,6 +13,12 @@ From: docker.io/python
 %post
     chmod a+x /bin/monitor
     chmod a+x /bin/find_pids
+
+%post                                                      
+    apt-get update -y                                      
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+                    openssh-client
+    rm -rf /var/lib/apt/lists/*
 
 %environment
     export PYTHONPATH=/usr/local/lib/monitor
